@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 import pickle
-from matplotlib import matplotlib.pyplot as plt
+import matplotlib.pyplot as plt
 
 # Load the model and columns
 lr_clf = pickle.load("banglore_home_prices_model.pkl")
