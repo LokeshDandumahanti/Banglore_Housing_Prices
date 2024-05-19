@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 import joblib
-import matplotlib as plt
+import matplotlib.pyplot as plt
 
 # Load the model and columns
 lr_clf = joblib.load("C:/Users/vijay/OneDrive/Desktop/Banglore Housing Project/banglore_home_prices_model.pkl")
