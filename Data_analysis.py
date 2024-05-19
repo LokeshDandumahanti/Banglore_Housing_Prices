@@ -1,11 +1,11 @@
 import streamlit as st
 import pandas as pd
 import numpy as np
-import joblib
+import pickle
 import matplotlib.pyplot as plt
 
 # Load the model and columns
-lr_clf = joblib.load("banglore_home_prices_model.pkl")
+lr_clf = pickle.load("banglore_home_prices_model.pkl")
 X_columns = pd.read_csv("dora.csv")
 OHE = pd.read_csv("B5.csv")
 locations = OHE['location'].tolist()
