@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 import pickle
-import matplotlib as plt
+import matplotlib.pyplot as plt
 
 # Load the model and columns
 with open("banglore_home_prices_model.pkl", 'rb') as file:
@@ -74,4 +74,3 @@ fig.text(0.5, 0.04, 'Number of Bathrooms', ha='center', va='center')
 
 plt.tight_layout(pad=3.0)
 st.pyplot(fig)
-plt.close(fig)  # Close the figure to prevent overlapping
