@@ -5,7 +5,8 @@ import pickle
 import matplotlib.pyplot as plt
 
 # Load the model and columns
-lr_clf = pickle.load("banglore_home_prices_model.pkl")
+with open("banglore_home_prices_model.pkl", 'rb') as file:
+    lr_clf = pickle.load(file)
 X_columns = pd.read_csv("dora.csv")
 OHE = pd.read_csv("B5.csv")
 locations = OHE['location'].tolist()
@@ -15,7 +16,10 @@ bhk1 = 5
 bath1 = 5
 
 def predict_price(location, sqft, bath, bhk):
-    loc_index = np.where(X_columns.columns == location)[0][0]
+    try:
+        loc_index = X_columns.columns.tolist().index(location)
+    except ValueError:
+        loc_index = -1
 
     x = np.zeros(len(X_columns.columns))
     x[0] = sqft
@@ -28,7 +32,7 @@ def predict_price(location, sqft, bath, bhk):
 
 def get_price_predictions(location, sqft, bhk):
     all_predictions = []
-    for bhk_val in range(1, bhk+1):
+    for bhk_val in range(1, bhk + 1):
         predictions = []
         for bath in range(1, 6):
             price_prediction = predict_price(location, sqft, bath, bhk_val)
@@ -51,18 +55,18 @@ st.write(f"Estimated Price per sqft : ₹ {estimated_price}")
 predictions = get_price_predictions(location, sqft, bhk1)
 
 # Display a spreadsheet-like table of prices
-prices_table = pd.DataFrame(predictions, columns=[f"{i+1} BHK" for i in range(bhk1)], index=[f"{i} Bathrooms" for i in range(1, bath1+1)])
+prices_table = pd.DataFrame(predictions, columns=[f"{i + 1} BHK" for i in range(bhk1)], index=[f"{i} Bathrooms" for i in range(1, bath1 + 1)])
 st.table(prices_table)
 
 # Plot graphs for each number of BHKs
-fig, axs = plt.subplots(bhk1, 1, figsize=(10, bhk1*5), sharex=True)
+fig, axs = plt.subplots(bhk1, 1, figsize=(10, bhk1 * 5), sharex=True)
 bath_values = range(1, 6)
 colors = ['blue', 'green', 'red', 'purple', 'orange']  # Define different colors for each BHK
 
 for i in range(bhk1):
-    axs[i].plot(bath_values, predictions[i], label=f'{i+1} BHK', color=colors[i])  # Use a different color for each BHK
+    axs[i].plot(bath_values, predictions[i], label=f'{i + 1} BHK', color=colors[i])  # Use a different color for each BHK
     axs[i].set_ylabel('Predicted Price per sqft (in ₹)')
-    axs[i].set_title(f'Predicted Price for {i+1} BHK (in ₹)')
+    axs[i].set_title(f'Predicted Price for {i + 1} BHK (in ₹)')
     axs[i].legend(loc='center left', bbox_to_anchor=(1, 0.5))  # Position legend to the right of the graph
 
 # Set common x-axis label
@@ -70,3 +74,4 @@ fig.text(0.5, 0.04, 'Number of Bathrooms', ha='center', va='center')
 
 plt.tight_layout(pad=3.0)
 st.pyplot(fig)
+plt.close(fig)  # Close the figure to prevent overlapping
